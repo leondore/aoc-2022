@@ -1,0 +1,9 @@
+{
+  "name": "aoc-2022",
+  "version": "1.0.0",
+  "description": "Advent of Code 2022",
+  "main": "index.js",
+  "repository": "https://github.com/leondore/aoc-2022",
+  "author": "Leon Dore",
+  "license": "MIT"
+}
