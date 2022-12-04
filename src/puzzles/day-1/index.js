@@ -1,6 +1,6 @@
-const { readFileSync } = require('fs');
+const { readInput } = require('../../utils.js');
 
-const elves = readInput('./input.txt');
+const elves = readInput(require.resolve('./input.txt')).split(/\n\s*\n/);
 const totals = elves.map((elf) => sumList(elf)).sort((a, b) => b - a);
 
 const mostCalories = totals.reduce((largest, current) => {
@@ -10,12 +10,6 @@ const mostCalories = totals.reduce((largest, current) => {
 const topThree = totals
   .slice(0, 3)
   .reduce((total, current) => total + current, 0);
-
-function readInput(file) {
-  const fileContent = readFileSync(require.resolve(file), 'utf-8');
-
-  return fileContent.split(/\n\s*\n/);
-}
 
 function sumList(list) {
   const amounts = list.split(/\r?\n/);
