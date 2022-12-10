@@ -1,7 +1,8 @@
 const { readInput } = require('../../utils.js');
 
 const input: string = readInput(require.resolve('./input.txt')).trim();
-const markerLength: number = 4;
+const packetMarkerLength: number = 4;
+const messageMarkerLength: number = 14;
 
 function hasDuplicates(slice: string): boolean {
   let valuesReviewed: { [key: string]: boolean } = {};
@@ -15,7 +16,7 @@ function hasDuplicates(slice: string): boolean {
   return false;
 }
 
-function findMarker(input: string): number {
+function findMarker(input: string, markerLength: number): number {
   for (let i = markerLength; i < input.length; i++) {
     let strSet = input.slice(i - markerLength, i);
 
@@ -25,4 +26,4 @@ function findMarker(input: string): number {
   return -1;
 }
 
-console.log(findMarker(input));
+console.log(findMarker(input, messageMarkerLength));
