@@ -1,34 +1,9 @@
-import { Dirent } from 'fs';
-
 const { readInput } = require('../../utils.js');
 const commandList: string[] = readInput(require.resolve('./input.txt'))
   .trim()
   .split('\n');
-// const test: string = `$ cd /
-// $ ls
-// dir a
-// 14848514 b.txt
-// 8504156 c.dat
-// dir d
-// $ cd a
-// $ ls
-// dir e
-// 29116 f
-// 2557 g
-// 62596 h.lst
-// $ cd e
-// $ ls
-// 584 i
-// $ cd ..
-// $ cd ..
-// $ cd d
-// $ ls
-// 4060174 j
-// 8033020 d.log
-// 5626152 d.ext
-// 7214296 k`;
-
-// const commandList: string[] = test.trim().split('\n');
+const totalSpace = 70000000;
+const spaceRequired = 30000000;
 
 interface Directory {
   id: string;
@@ -146,10 +121,19 @@ function calculateDirectorySizes(): void {
 generateFileSystem();
 calculateDirectorySizes();
 
+// Part 1: Find all directories that are at least 100,000 in size and add them together.
 const dir100k = fileSystem
   .filter((dir) => dir.size <= 100000)
   .reduce((total, current) => total + current.size, 0);
 
-console.log(dir100k);
+// Part 2: Find the smallest directory that, if deleted, would free up enough space on the filesystem to run the update.
+const root = fileSystem[0];
+const requiredFolderSize = spaceRequired - (totalSpace - (root?.size || 0));
+const possibleDeletions = fileSystem
+  .filter((dir) => dir.size >= requiredFolderSize)
+  .map((dir) => dir.size);
+const folderToDelete = Math.min(...possibleDeletions);
+
+console.log(folderToDelete);
 
 export {};
