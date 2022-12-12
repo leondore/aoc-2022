@@ -27,3 +27,5 @@ function findMarker(input: string, markerLength: number): number {
 }
 
 console.log(findMarker(input, messageMarkerLength));
+
+export {};
