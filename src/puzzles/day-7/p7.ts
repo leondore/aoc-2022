@@ -128,7 +128,7 @@ const dir100k = fileSystem
 
 // Part 2: Find the smallest directory that, if deleted, would free up enough space on the filesystem to run the update.
 const root = fileSystem[0];
-const requiredFolderSize = spaceRequired - (totalSpace - (root?.size || 0));
+const requiredFolderSize = spaceRequired - (totalSpace - root.size);
 const possibleDeletions = fileSystem
   .filter((dir) => dir.size >= requiredFolderSize)
   .map((dir) => dir.size);
