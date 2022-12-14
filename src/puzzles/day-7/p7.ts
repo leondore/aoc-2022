@@ -11,7 +11,6 @@ interface Directory {
   children: string[];
   ancestors: string[];
   files: string[];
-  filesize: number;
   size: number;
 }
 
@@ -48,7 +47,6 @@ function changeDirectory(dirname: string): void {
       children: [],
       ancestors: [...ancestors],
       files: [],
-      filesize: 0,
       size: 0,
     };
 
@@ -75,9 +73,14 @@ function populateDirectory(list: string[]): void {
         directory.children.push(generateId(name));
       } else {
         directory.files.push(name);
-        directory.filesize += +typeOrSize;
+        directory.size += +typeOrSize;
       }
     }
+
+    directory.ancestors.forEach((ancestor) => {
+      const ancestorDir = fileSystem.find((dir) => dir.id === ancestor);
+      if (ancestorDir) ancestorDir.size += directory.size;
+    });
   }
 }
 
@@ -103,23 +106,7 @@ function generateFileSystem(): void {
   }
 }
 
-function calculateDirectorySizes(): void {
-  for (const directory of fileSystem) {
-    const descendants = fileSystem.filter((dir) =>
-      dir.ancestors.includes(directory.id)
-    );
-
-    const descendantsSize = descendants.reduce(
-      (total, current) => total + current.filesize,
-      0
-    );
-
-    directory.size = directory.filesize + descendantsSize;
-  }
-}
-
 generateFileSystem();
-calculateDirectorySizes();
 
 // Part 1: Find all directories that are at least 100,000 in size and add them together.
 const dir100k = fileSystem
