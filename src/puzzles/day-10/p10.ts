@@ -2,7 +2,7 @@ import { readInput } from '../../utils';
 
 type Ops = 'addx' | 'noop';
 
-const input = readInput(require.resolve('./input.txt'))
+const input = readInput(require.resolve('./test.txt'))
   .trim()
   .split('\n')
   .map((line) => {
@@ -10,7 +10,7 @@ const input = readInput(require.resolve('./input.txt'))
     return [func, +val] as [Ops, number];
   });
 
-class CPU {
+class Device {
   cycles: number;
   registerX: number;
   cache: Map<number, number>;
@@ -18,7 +18,7 @@ class CPU {
   constructor() {
     this.cycles = 0;
     this.registerX = 1;
-    this.cache = new Map([[0, 0]]);
+    this.cache = new Map([[0, 1]]);
   }
 
   addx(value: number) {
@@ -48,14 +48,14 @@ class CPU {
   }
 }
 
-const cpu = new CPU();
-cpu.run();
+const device = new Device();
+device.run();
 
 const cycles = [20, 60, 100, 140, 180, 220];
 const strengths = cycles
-  .map((cycle) => cpu.getSignalStrength(cycle))
+  .map((cycle) => device.getSignalStrength(cycle))
   .reduce((acc, curr) => acc + curr, 0);
 
-console.log(strengths);
+console.log(device.cache);
 
 export {};
