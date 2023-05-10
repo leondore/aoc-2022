@@ -15,21 +15,24 @@ class Device {
   registerX: number;
   cache: Map<number, number>;
   crt: string;
+  PIXELS_PER_ROW: number;
 
   constructor() {
     this.cycles = 0;
     this.registerX = 1;
     this.cache = new Map([[0, 1]]);
     this.crt = '';
+    this.PIXELS_PER_ROW = 40;
   }
 
   runCycle() {
-    const position = ((this.cycles + 1) % 40) - 1;
+    const position =
+      ((this.cycles + 1) % this.PIXELS_PER_ROW || this.PIXELS_PER_ROW) - 1;
     this.crt +=
       position >= this.registerX - 1 && position <= this.registerX + 1
         ? '#'
         : '.';
-    this.crt += (this.cycles + 1) % 40 === 0 ? '\n' : '';
+    this.crt += (this.cycles + 1) % this.PIXELS_PER_ROW === 0 ? '\n' : '';
 
     this.cycles++;
     this.cache.set(this.cycles, this.registerX);
