@@ -2,7 +2,7 @@ import { readInput } from '../../utils';
 
 type Ops = 'addx' | 'noop';
 
-const input = readInput(require.resolve('./test.txt'))
+const input = readInput(require.resolve('./input.txt'))
   .trim()
   .split('\n')
   .map((line) => {
@@ -14,25 +14,36 @@ class Device {
   cycles: number;
   registerX: number;
   cache: Map<number, number>;
+  crt: string;
 
   constructor() {
     this.cycles = 0;
     this.registerX = 1;
     this.cache = new Map([[0, 1]]);
+    this.crt = '';
+  }
+
+  runCycle() {
+    const position = ((this.cycles + 1) % 40) - 1;
+    this.crt +=
+      position >= this.registerX - 1 && position <= this.registerX + 1
+        ? '#'
+        : '.';
+    this.crt += (this.cycles + 1) % 40 === 0 ? '\n' : '';
+
+    this.cycles++;
+    this.cache.set(this.cycles, this.registerX);
   }
 
   addx(value: number) {
-    this.cycles++;
-    this.cache.set(this.cycles, this.registerX);
+    this.runCycle();
+    this.runCycle();
 
-    this.cycles++;
-    this.cache.set(this.cycles, this.registerX);
     this.registerX += value;
   }
 
   noop() {
-    this.cycles++;
-    this.cache.set(this.cycles, this.registerX);
+    this.runCycle();
     return;
   }
 
@@ -56,6 +67,6 @@ const strengths = cycles
   .map((cycle) => device.getSignalStrength(cycle))
   .reduce((acc, curr) => acc + curr, 0);
 
-console.log(device.cache);
+console.log(device.crt);
 
 export {};
